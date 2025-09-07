@@ -18,9 +18,12 @@ app.use(cors({
 app.use('/api', router);
 
 
-app.get('/',(req:Request, res:Response)=>{
-    res.send('home page')
-})
+app.get("/", (req: Request, res: Response) => {
+  res.status(200).json({
+    message: "Welcome to PhoneHub API",
+  });
+});
+
 app.use(globalErrorHandler)
 
 app.use(notFound)
