@@ -69,7 +69,7 @@ const increaseQuantity = async (email: string, productId: string) => {
   phone.quantity -= 1;
   await phone.save();
   await cart.save();
-  console.log('cart', cart);
+ 
   return cart;
 };
 

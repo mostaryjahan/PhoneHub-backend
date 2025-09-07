@@ -10,7 +10,7 @@ const router = express.Router()
 
 // will call controller func
 router.post('/', 
-    auth(USER_ROLE.admin),
+    auth(USER_ROLE.admin, USER_ROLE.vendor),
     validateRequest(PhoneValidation.createPhoneValidationSchema),
     PhoneControllers.createPhone)
 

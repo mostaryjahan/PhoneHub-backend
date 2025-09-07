@@ -10,7 +10,7 @@ const app:Application = express()
 // parsers
 app.use(express.json())
 app.use(cors({
-  origin: config.FRONTEND_URL,
+  origin: [config.FRONTEND_URL || '',  "http://localhost:5173"],
   credentials: true,
 }));
 
