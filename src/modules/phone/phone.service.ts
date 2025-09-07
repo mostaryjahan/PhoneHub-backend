@@ -7,13 +7,13 @@ const createPhoneIntoDB = async (phone: Phone) => {
   return result;
 };
 
-// get all phone
+
 // Get all phone with filtering, searching, sorting, and pagination
 const getAllPhoneFromDB = async (query: Record<string, unknown>) => {
-  const modelQuery = PhoneModel.find(); // Start with a basic query
+  const modelQuery = PhoneModel.find(); 
 
   const queryBuilder = new QueryBuilder<Phone>(modelQuery, query)
-    .search(['brand', 'name', 'category']) // Search in name, brand, and model
+    .search(['brand', 'name', 'category']) 
     .filter()
     .sort()
     .paginate()

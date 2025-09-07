@@ -1,12 +1,14 @@
-
 export type Phone = {
-    brand: string;
-    model: string;
-    year: number;
-    price: number;
-    category:'Apple' | 'Samsung'| 'Google'| 'Huawei'| 'Xiaomi'| 'Motorola'| 'Nokia';
-    description:string;
-    image:string;
-    quantity:number;
-    inStock:boolean;
-  }
+  brand: 'Apple' | 'Samsung' | 'Google' | 'OnePlus' | 'Xiaomi' | 'Motorola' | 'Nokia';
+  model: string;
+  year: number;
+  price: number;
+  category: 'Official' | 'Unofficial' | 'Refurbished' | 'Used';
+  description: string;
+  image: string;
+  quantity: number;
+  inStock: boolean;
+  discount?: number;
+  addedBy?: string;
+  addedByName?: string;
+};

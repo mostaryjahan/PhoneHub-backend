@@ -15,7 +15,7 @@ const cartSchema = new Schema<TCart>(
     email: { type: String, required: true },
     items: [
       {
-        product: { type: Schema.Types.ObjectId, ref: 'Car', required: true },
+        product: { type: Schema.Types.ObjectId, ref: 'Phone', required: true },
         quantity: { type: Number, required: true, min: 1 },
       },
     ],

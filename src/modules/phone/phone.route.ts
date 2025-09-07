@@ -16,7 +16,7 @@ router.post('/',
 
 router.get('/',PhoneControllers.getAllPhone)
 
-router.get('/:phoneId',auth(USER_ROLE.user), PhoneControllers.getSinglePhone)
+router.get('/:phoneId', PhoneControllers.getSinglePhone)
 
 router.put('/:phoneId', PhoneControllers.updateSinglePhone)
 

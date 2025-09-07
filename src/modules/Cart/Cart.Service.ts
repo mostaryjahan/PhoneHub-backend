@@ -1,14 +1,14 @@
 import mongoose from 'mongoose';
-import { CarModel } from '../phone/phone.model';
+import { PhoneModel } from '../phone/phone.model';
 import { CartModel } from './Cart.model';
 
 const addToCart = async (email: string, productId: string) => {
-  const car = await CarModel.findById(productId);
+  const phone = await PhoneModel.findById(productId);
 
-  if (!car) throw new Error('Car not found');
+  if (!phone) throw new Error('Phone not found');
 
   // Ensure that there is enough stock
-  if (car.quantity <= 0) throw new Error('Car is out of stock');
+  if (phone.quantity <= 0) throw new Error('Phone is out of stock');
   // console.log(productId);
   let cart = await CartModel.findOne({ email });
 
@@ -26,7 +26,7 @@ const addToCart = async (email: string, productId: string) => {
       item.product.equals(productId),
     );
     cart.items[itemIndex].quantity += 1;
-    car.quantity -= 1;
+    phone.quantity -= 1;
   } else {
     // If product does not exist, add a new entry
 
@@ -34,10 +34,10 @@ const addToCart = async (email: string, productId: string) => {
       product: new mongoose.Types.ObjectId(productId),
       quantity: 1,
     });
-    car.quantity -= 1;
+    phone.quantity -= 1;
   }
 
-  await car.save();
+  await phone.save();
   await cart.save();
   return cart;
 };
@@ -49,11 +49,11 @@ const getUserCart = async (email: string) => {
 };
 
 const increaseQuantity = async (email: string, productId: string) => {
-  const car = await CarModel.findById(productId);
-  if (!car) throw new Error('Car not found');
+  const phone = await PhoneModel.findById(productId);
+  if (!phone) throw new Error('Phone not found');
 
   // Ensure that there is enough stock
-  if (car.quantity <= 0) throw new Error('Car is out of stock');
+  if (phone.quantity <= 0) throw new Error('Phone is out of stock');
   // console.log(productId);
   const cart = await CartModel.findOne({ email });
 
@@ -66,16 +66,16 @@ const increaseQuantity = async (email: string, productId: string) => {
   if (itemIndex === -1) throw new Error('Item not found in cart');
 
   cart.items[itemIndex].quantity += 1;
-  car.quantity -= 1;
-  await car.save();
+  phone.quantity -= 1;
+  await phone.save();
   await cart.save();
   console.log('cart', cart);
   return cart;
 };
 
 const decreaseQuantity = async (email: string, productId: string) => {
-  const car = await CarModel.findById(productId);
-  if (!car) throw new Error('Car not found');
+  const phone = await PhoneModel.findById(productId);
+  if (!phone) throw new Error('Phone not found');
 
   const cart = await CartModel.findOne({ email });
 
@@ -89,7 +89,7 @@ const decreaseQuantity = async (email: string, productId: string) => {
 
   if (cart.items[itemIndex].quantity > 1) {
     cart.items[itemIndex].quantity -= 1;
-    car.quantity += 1;
+    phone.quantity += 1;
   } else {
     cart.items.splice(itemIndex, 1);
   }
@@ -99,22 +99,22 @@ const decreaseQuantity = async (email: string, productId: string) => {
     return null;
   }
 
-  await car.save();
+  await phone.save();
   await cart.save();
   return cart;
 };
 
 const removeCartItem = async (email: string, productId: string) => {
   const cart = await CartModel.findOne({ email });
-  const car = await CarModel.findById(productId);
+  const phone = await PhoneModel.findById(productId);
 
   if (!cart) throw new Error('Cart not found');
-  if (!car) throw new Error('Car not found');
+  if (!phone) throw new Error('Phone not found');
 
   let removedItemQuantity = 0;
 
   cart.items = cart.items.filter((item) => {
-    if (item.product.toString() !== productId) {
+    if (item.product.toString() === productId) {
       removedItemQuantity = item.quantity;
       return false;
     }
@@ -122,8 +122,8 @@ const removeCartItem = async (email: string, productId: string) => {
   });
 
   if (removedItemQuantity > 0) {
-    car.quantity += removedItemQuantity;
-    await car.save();
+    phone.quantity += removedItemQuantity;
+    await phone.save();
   }
   if (cart.items.length === 0) {
     await CartModel.findOneAndDelete({ email });

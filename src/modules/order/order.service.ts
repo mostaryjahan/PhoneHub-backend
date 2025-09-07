@@ -95,11 +95,13 @@ const verifyPayment = async (order_id: string) => {
 };
 
 const getOrderByEmail = async (email: string) => {
-  const orders = await Order.find({ userEmail: email });
-
-  //  const userOrders = orders.filter(order => (order.user?.email)as string  === email);
-
-  return orders;
+  try {
+    const orders = await Order.find({ userEmail: email });
+    return orders;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw new AppError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to fetch orders');
+  }
 };
 
 export const orderService = {
