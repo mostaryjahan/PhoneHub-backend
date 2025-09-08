@@ -24,14 +24,14 @@ router.post(
 
 router.patch(
   '/update-profile/:userId',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.vendor),
   validateRequest(UserValidation.updateProfileValidationSchema),
   UserController.updateProfile,
 );
 
 router.patch(
   '/update-profile-photo/:userId',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.vendor),
   validateRequest(UserValidation.updatePhotoValidationSchema),
   UserController.updateProfilePhoto,
 );

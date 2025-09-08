@@ -75,6 +75,7 @@ const blockUser = async (id: string, payload: Partial<TUser>) => {
   return updateUser;
 };
 
+// user.service.ts
 const updateProfile = async (
   id: string,
   payload: Partial<TUser>,
@@ -84,10 +85,9 @@ const updateProfile = async (
 
   if (!userData) throw new AppError(status.NOT_FOUND, 'User not found');
 
-  if (userData.email !== user.email)
+  if (userData.email !== user.email && user.role !== 'admin') {
     throw new AppError(status.UNAUTHORIZED, 'You are not authorized!');
-
-  // // Ensure the user can only update name, status and shippingAddress
+  }
 
   const allowedUpdates: (keyof TUser)[] = [
     'name',
@@ -102,12 +102,15 @@ const updateProfile = async (
       filteredUpdates[key] = payload[key] as never;
     }
   }
+  
   const updateUser = await User.findByIdAndUpdate(id, filteredUpdates, {
     new: true,
     runValidators: true,
   });
   return updateUser;
 };
+
+
 const updateProfilePhoto = async (
   id: string,
   payload: Partial<TUser>,
@@ -130,6 +133,9 @@ const updateProfilePhoto = async (
       filteredUpdates[key] = payload[key] as never;
     }
   }
+
+
+
   const updateUser = await User.findByIdAndUpdate(id, filteredUpdates, {
     new: true,
     runValidators: true,
