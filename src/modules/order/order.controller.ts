@@ -49,6 +49,31 @@ const getOrderByEmail = catchAsync(async (req, res) => {
     });
 });
 
+const updateOrderStatus = catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const order = await orderService.updateOrderStatus(id, status);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        message: "Order status updated successfully",
+        success: true,
+        data: order,
+    });
+});
+
+const deleteOrder = catchAsync(async (req, res) => {
+    const { id } = req.params;
+
+    await orderService.deleteOrder(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        message: "Order deleted successfully",
+        success: true,
+        data: null,
+    });
+});
+
 const verifyPayment = catchAsync(async (req, res) =>{
     const order = await orderService.verifyPayment(req.query.order_id as string);
 
@@ -60,4 +85,4 @@ const verifyPayment = catchAsync(async (req, res) =>{
     });
 });
 
-export const orderController = { createOrder, verifyPayment, getOrders, getOrderByEmail };
+export const orderController = { createOrder, verifyPayment, getOrders, getOrderByEmail, updateOrderStatus, deleteOrder };

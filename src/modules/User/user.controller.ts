@@ -98,6 +98,18 @@ const updateProfilePhoto = catchAsync(async (req, res) => {
   });
 });
 
+const changeRole = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await UserServices.changeRole(id, req.body);
+
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: 'User role updated successfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   getSingleUser,
   getAllUsers,
@@ -105,4 +117,5 @@ export const UserController = {
   blockUser,
   updateProfile,
   updateProfilePhoto,
+  changeRole,
 };

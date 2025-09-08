@@ -62,8 +62,26 @@ const createOrder = async (
 };
 
 const getOrders = async () => {
-  const data = await Order.find().populate('user');
-  return data;
+  const data = await Order.find()
+    .populate({
+      path: 'products.product',
+      model: 'Phone'
+    })
+    .lean();
+  
+  // Manually populate user data based on userEmail
+  const { User } = await import('../User/user.model');
+  const ordersWithUsers = await Promise.all(
+    data.map(async (order) => {
+      const user = await User.findOne({ email: order.userEmail }).select('name email');
+      return {
+        ...order,
+        user: user || { name: 'Unknown User', email: order.userEmail }
+      };
+    })
+  );
+  
+  return ordersWithUsers;
 };
 
 const verifyPayment = async (order_id: string) => {
@@ -104,9 +122,35 @@ const getOrderByEmail = async (email: string) => {
   }
 };
 
+const updateOrderStatus = async (orderId: string, status: string) => {
+  const order = await Order.findByIdAndUpdate(
+    orderId,
+    { status },
+    { new: true }
+  );
+  
+  if (!order) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  
+  return order;
+};
+
+const deleteOrder = async (orderId: string) => {
+  const order = await Order.findByIdAndDelete(orderId);
+  
+  if (!order) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Order not found');
+  }
+  
+  return order;
+};
+
 export const orderService = {
   createOrder,
   getOrders,
   verifyPayment,
   getOrderByEmail,
+  updateOrderStatus,
+  deleteOrder,
 };

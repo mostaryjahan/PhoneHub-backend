@@ -143,6 +143,23 @@ const updateProfilePhoto = async (
   return updateUser;
 };
 
+const changeRole = async (id: string, payload: Partial<TUser>) => {
+  const allowedUpdates: (keyof TUser)[] = ['role'];
+  const filteredUpdates: Partial<TUser> = {};
+
+  for (const key of allowedUpdates) {
+    if (key in payload) {
+      filteredUpdates[key] = payload[key] as never;
+    }
+  }
+
+  const updateUser = await User.findByIdAndUpdate(id, filteredUpdates, {
+    new: true,
+    runValidators: true,
+  });
+  return updateUser;
+};
+
 export const UserServices = {
   getSingleUserFromDB,
   getAllUsersFromDB,
@@ -150,4 +167,5 @@ export const UserServices = {
   blockUser,
   updateProfile,
   updateProfilePhoto,
+  changeRole,
 };

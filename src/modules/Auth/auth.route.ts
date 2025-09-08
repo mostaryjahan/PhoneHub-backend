@@ -10,7 +10,7 @@ const router = Router();
 
 router.post(
   '/logout',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.vendor),
   AuthControllers.logoutUser,
 );
 

@@ -35,9 +35,15 @@ router.patch(
   validateRequest(UserValidation.updatePhotoValidationSchema),
   UserController.updateProfilePhoto,
 );
+
+router.patch(
+  '/change-role/:id',
+  auth(USER_ROLE.admin),
+  UserController.changeRole,
+);
 router.get(
   '/:userEmail',
-  auth(USER_ROLE.admin, USER_ROLE.user),
+  auth(USER_ROLE.admin, USER_ROLE.user, USER_ROLE.vendor),
   UserController.getSingleUser,
 );
 router.get('/', auth(USER_ROLE.admin), UserController.getAllUsers);
